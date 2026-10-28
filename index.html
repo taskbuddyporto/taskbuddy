@@ -75,12 +75,18 @@ footer{text-align:center;color:var(--muted);font-size:.88rem;margin-top:2rem}
  <button class="btn" type="submit" style="background:var(--blue);color:var(--on-blue)" data-t="send"></button>
  <p class="note" data-t="note"></p>
  <div class="ok" id="ok" role="status" data-t="ok"></div>
+ <div class="ok" id="err" role="alert"></div>
 </form>
 <footer data-t="foot"></footer>
 </div>
 
 <script>
 var PARENT_EMAIL = "taskbuddyporto@gmail.com";
+// Hours by weekday: 0=Sunday, 1=Monday ... 6=Saturday. [start, end] in 24h time.
+// Delete a day from the list to block it completely.
+var HOURS = {0:[9,12],1:[16,20],2:[16,20],3:[16,20],4:[16,20],5:[16,20],6:[9,24]};
+// Blocked dates, written like "2026-12-25". Separate several with commas.
+var BLOCKED = [];
 
 var S = [
  ["🐕","dog","Passear cães","Dog walking","Passeios diários ou pontuais","Daily or one-off walks"],
@@ -132,6 +138,15 @@ $("f").addEventListener("submit",function(e){
  e.preventDefault();
  var i=lang==="pt"?2:3,s=S.filter(function(x){return x[1]===$("service").value})[0];
  if(!s)return;
+ var d=new Date($("date").value+"T12:00:00"),h=HOURS[d.getDay()],err="",
+  mins=parseInt($("time").value.slice(0,2),10)*60+parseInt($("time").value.slice(3,5),10);
+ if(BLOCKED.indexOf($("date").value)>-1||!h){
+  err=lang==="pt"?"Nesse dia não estamos disponíveis. Escolhe outra data.":"We’re not available that day. Please choose another date.";
+ }else if(mins<h[0]*60||mins>h[1]*60){
+  err=lang==="pt"?"Nesse dia atendemos das "+h[0]+"h às "+h[1]+"h.":"That day we’re available from "+h[0]+"h to "+h[1]+"h.";
+ }
+ $("err").textContent=err;$("err").style.display=err?"block":"none";
+ if(err)return;
  var body=[s[0]+" "+s[i],$("date").value+" "+$("time").value,$("name").value,$("phone").value,$("addr").value,$("msg").value].join("\n");
  location.href="mailto:"+PARENT_EMAIL+"?subject="+encodeURIComponent("TaskBuddy: "+s[i])+"&body="+encodeURIComponent(body);
  $("ok").style.display="block";
