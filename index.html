@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TaskBuddy – Leça do Balio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f8ff;--surface:#fff;--ink:#14224a;--muted:#5a6788;--blue:#1f4e9c;--on-blue:#fff;--sun:#ffc83d;--on-sun:#14224a;--line:#d5e0f5;--sel:#e3edff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1730;--surface:#18234a;--ink:#eef3ff;--muted:#a3b1d6;--blue:#6f9bf0;--on-blue:#0f1730;--line:#2b3a6b;--sel:#233a78}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1730;--surface:#18234a;--ink:#eef3ff;--muted:#a3b1d6;--blue:#6f9bf0;--on-blue:#0f1730;--line:#2b3a6b;--sel:#233a78}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 Nunito,system-ui,sans-serif}
+.wrap{max-width:560px;margin:0 auto;padding:0 1rem 3rem}
+header{display:flex;justify-content:space-between;align-items:center;padding:1rem 0}
+.logo{font:600 1.5rem Fredoka,system-ui,sans-serif;color:var(--blue)}
+.lang{display:flex;background:var(--surface);border:2px solid var(--line);border-radius:99px;padding:2px}
+.lang button{border:0;background:none;color:var(--muted);font:700 .9rem Nunito,sans-serif;padding:.35rem .8rem;border-radius:99px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--blue);color:var(--on-blue)}
+.hero{background:var(--blue);color:var(--on-blue);border-radius:28px;padding:1.6rem 1.3rem;margin-bottom:1.4rem;position:relative;overflow:hidden}
+.hero h1{font:600 2rem/1.15 Fredoka,system-ui,sans-serif;margin:0 0 .5rem}
+.hero p{margin:0 0 1.1rem;max-width:30ch}
+.btn{display:inline-block;border:0;background:var(--sun);color:var(--on-sun);font:700 1.05rem Nunito,sans-serif;padding:.85rem 1.4rem;border-radius:99px;cursor:pointer;text-decoration:none}
+.btn:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.tile{position:absolute;right:-18px;top:-18px;width:110px;height:110px;opacity:.18;background:conic-gradient(from 45deg,#fff 0 25%,transparent 0 50%,#fff 0 75%,transparent 0);background-size:55px 55px}
+h2{font:600 1.35rem Fredoka,system-ui,sans-serif;margin:1.6rem 0 .8rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:1rem;text-align:left;cursor:pointer;color:var(--ink);font:inherit;display:flex;flex-direction:column;gap:.15rem}
+.card[aria-pressed="true"]{border-color:var(--blue);background:var(--sel)}
+.card .ic{font-size:1.9rem;line-height:1}
+.card b{font-weight:700}
+.card small{color:var(--muted);line-height:1.3}
+form{background:var(--surface);border:2px solid var(--line);border-radius:24px;padding:1.2rem;display:grid;gap:.9rem}
+label{display:grid;gap:.25rem;font-weight:700;font-size:.92rem}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:.65rem .75rem;width:100%}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.note{color:var(--muted);font-size:.88rem;margin:0}
+.ok{display:none;background:var(--sel);border-radius:14px;padding:.8rem 1rem;font-weight:600}
+footer{text-align:center;color:var(--muted);font-size:.88rem;margin-top:2rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <span class="logo">TaskBuddy</span>
+ <div class="lang" role="group" aria-label="Language">
+  <button data-l="pt" aria-pressed="true">PT</button><button data-l="en" aria-pressed="false">EN</button>
+ </div>
+</header>
+
+<section class="hero">
+ <div class="tile" aria-hidden="true"></div>
+ <h1 data-t="h1"></h1>
+ <p data-t="sub"></p>
+ <a class="btn" href="#book" data-t="cta"></a>
+</section>
+
+<h2 data-t="svc"></h2>
+<div class="grid" id="services"></div>
+
+<h2 id="book" data-t="req"></h2>
+<form id="f">
+ <label><span data-t="fs"></span><select id="service" required></select></label>
+ <div class="row">
+  <label><span data-t="fd"></span><input type="date" id="date" required></label>
+  <label><span data-t="ft"></span><input type="time" id="time" required></label>
+ </div>
+ <label><span data-t="fn"></span><input id="name" autocomplete="name" required></label>
+ <label><span data-t="fp"></span><input id="phone" type="tel" autocomplete="tel" required></label>
+ <label><span data-t="fa"></span><input id="addr" placeholder="Leça do Balio" required></label>
+ <label><span data-t="fm"></span><textarea id="msg" rows="3"></textarea></label>
+ <button class="btn" type="submit" style="background:var(--blue);color:var(--on-blue)" data-t="send"></button>
+ <p class="note" data-t="note"></p>
+ <div class="ok" id="ok" role="status" data-t="ok"></div>
+</form>
+<footer data-t="foot"></footer>
+</div>
+
+<script>
+var PARENT_EMAIL = "taskbuddyporto@gmail.com";
+
+var S = [
+ ["🐕","dog","Passear cães","Dog walking","Passeios diários ou pontuais","Daily or one-off walks"],
+ ["🐾","pet","Cuidar de animais","Pet feeding","Comida e água em tua casa","Food and water while you’re out"],
+ ["🚗","car","Lavar o carro","Car washing","Lavagem à mão, à porta de casa","Hand wash at your door"],
+ ["🌱","plants","Regar plantas e recolher correio","Plants and post","Enquanto estás fora","While you’re away"],
+ ["🛒","errands","Pequenos recados","Small errands","Compras e entregas locais","Local shopping and drop-offs"],
+ ["💻","tech","Ajuda com telemóvel e PC","Phone and computer help","Passo a passo, com paciência","Step by step, patiently"],
+ ["🧹","other","Outros trabalhos simples","Other simple jobs","Diz-nos o que precisas","Tell us what you need"]
+];
+var T = {
+ pt:{h1:"O teu ajudante local",sub:"Pequenos serviços em Leça do Balio e arredores.",cta:"Pedir um serviço",svc:"Serviços",req:"Pedido de serviço",
+  fs:"Serviço",fd:"Data preferida",ft:"Hora",fn:"O teu nome",fp:"Telemóvel",fa:"Morada ou zona",fm:"Detalhes (opcional)",send:"Enviar pedido",
+  note:"Isto é um pedido, não uma marcação. Um adulto da família confirma contigo antes de combinar o trabalho.",
+  ok:"Pedido preparado! Envia o email que abriu. Vamos responder para confirmar.",foot:"TaskBuddy · Leça do Balio",pick:"Escolhe um serviço"},
+ en:{h1:"Your local helper",sub:"Small local services in Leça do Balio and nearby.",cta:"Request a service",svc:"Services",req:"Request a service",
+  fs:"Service",fd:"Preferred date",ft:"Time",fn:"Your name",fp:"Phone number",fa:"Address or area",fm:"Details (optional)",send:"Send request",
+  note:"This is a request, not a booking. An adult in the family will confirm with you before any job is arranged.",
+  ok:"Request ready! Send the email that just opened. We’ll reply to confirm.",foot:"TaskBuddy · Leça do Balio",pick:"Choose a service"}
+};
+var lang="pt", sel="";
+try{lang=localStorage.getItem("tb-lang")||""}catch(e){}
+if(lang!=="en"&&lang!=="pt")lang="pt";
+var $=function(i){return document.getElementById(i)};
+
+function render(){
+ var t=T[lang],i=lang==="pt"?2:3;
+ document.documentElement.lang=lang;
+ document.querySelectorAll("[data-t]").forEach(function(n){n.textContent=t[n.dataset.t]});
+ document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.l===lang)});
+ $("services").innerHTML=S.map(function(s){
+  return '<button type="button" class="card" data-k="'+s[1]+'" aria-pressed="'+(sel===s[1])+'"><span class="ic">'+s[0]+'</span><b>'+s[i]+'</b><small>'+s[i+2]+'</small></button>';
+ }).join("");
+ $("service").innerHTML='<option value="">'+t.pick+'</option>'+S.map(function(s){
+  return '<option value="'+s[1]+'"'+(sel===s[1]?' selected':'')+'>'+s[0]+' '+s[i]+'</option>';
+ }).join("");
+ $("date").min=new Date().toISOString().slice(0,10);
+}
+document.querySelector(".lang").addEventListener("click",function(e){
+ var l=e.target.dataset&&e.target.dataset.l; if(!l)return;
+ lang=l; try{localStorage.setItem("tb-lang",l)}catch(x){} render();
+});
+$("services").addEventListener("click",function(e){
+ var c=e.target.closest(".card"); if(!c)return;
+ sel=c.dataset.k; render(); $("book").scrollIntoView({behavior:"smooth"});
+});
+$("service").addEventListener("change",function(){sel=this.value;render()});
+$("f").addEventListener("submit",function(e){
+ e.preventDefault();
+ var i=lang==="pt"?2:3,s=S.filter(function(x){return x[1]===$("service").value})[0];
+ if(!s)return;
+ var body=[s[0]+" "+s[i],$("date").value+" "+$("time").value,$("name").value,$("phone").value,$("addr").value,$("msg").value].join("\n");
+ location.href="mailto:"+PARENT_EMAIL+"?subject="+encodeURIComponent("TaskBuddy: "+s[i])+"&body="+encodeURIComponent(body);
+ $("ok").style.display="block";
+});
+render();
+</script>
+</body>
+</html>
